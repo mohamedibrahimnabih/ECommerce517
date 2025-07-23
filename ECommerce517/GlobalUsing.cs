@@ -1,0 +1,3 @@
+﻿global using ECommerce517.Models;
+global using ECommerce517.DataAccess;
+global using ECommerce517.ViewModels;
