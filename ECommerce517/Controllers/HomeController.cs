@@ -25,6 +25,34 @@ public class HomeController : Controller
         return View(products.ToList());
     }
 
+    public IActionResult Details([FromRoute] int id)
+    {
+        var product = _context.Products.Include(e => e.Category).FirstOrDefault(e => e.Id == id);
+
+        if (product is null)
+            return NotFound();
+
+        // Update Traffic
+        product.Traffic += 1;
+        _context.SaveChanges();
+
+        // Related products
+        var relatedProducts = _context.Products.Include(e=>e.Category).Where(e => e.CategoryId == product.CategoryId && e.Id != product.Id).Skip(0).Take(4);
+
+        // Top Traffic
+        var topTraffic = _context.Products.Include(e => e.Category).OrderByDescending(e => e.Traffic).Where(e => e.Id != product.Id).Skip(0).Take(4);
+
+        // Return Data
+        ProductWithRelatedVM productWithRelatedVM = new()
+        {
+            Product = product,
+            RelatedProducts = relatedProducts.ToList(),
+            TopTraffic = topTraffic.ToList()
+        };
+
+        return View(productWithRelatedVM);
+    }
+
     public IActionResult Privacy()
     {
         return View();

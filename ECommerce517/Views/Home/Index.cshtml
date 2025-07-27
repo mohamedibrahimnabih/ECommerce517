@@ -47,13 +47,13 @@
                                         <div class="bi-star-fill"></div>
                                     </div>
                                     <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">@item.Price.ToString("c")</span>
+                                    <span class="text-decoration-line-through text-danger">@item.Price.ToString("c")</span>
                                     @((@item.Price - (item.Price * (item.Discount/100))).ToString("c"))
                                 </div>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/home/details/@item.Id">Details</a></div>
                             </div>
                         </div>
                     </div>
