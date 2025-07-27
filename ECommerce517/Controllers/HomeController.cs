@@ -16,11 +16,55 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(ProductFilterVM productFilterVM, int page = 1)
     {
-        var products = _context.Products.Include(e => e.Category);
+        const double discount = 50;
+        var products = _context.Products.Include(e => e.Category).AsQueryable();
 
-        //
+        // Filter
+        if (productFilterVM.ProductName is not null)
+        {
+            products = products.Where(e => e.Name.Contains(productFilterVM.ProductName));
+            ViewBag.ProductName = productFilterVM.ProductName;
+        }
+
+        if (productFilterVM.MinPrice is not null)
+        {
+            products = products.Where(e => (e.Price - (e.Price * (e.Discount / 100)) >= productFilterVM.MinPrice));
+            ViewBag.MinPrice = productFilterVM.MinPrice;
+        }
+
+        if (productFilterVM.MaxPrice is not null)
+        {
+            products = products.Where(e => (e.Price - (e.Price * (e.Discount / 100)) <= productFilterVM.MaxPrice));
+            ViewBag.MaxPrice = productFilterVM.MaxPrice;
+        }
+
+        if (productFilterVM.CategoryId is not null)
+        {
+            products = products.Where(e => e.CategoryId == productFilterVM.CategoryId);
+            ViewBag.CategoryId = productFilterVM.CategoryId;
+        }
+
+        if (productFilterVM.IsHot)
+        {
+            products = products.Where(e => e.Discount > discount);
+            ViewBag.IsHot = productFilterVM.IsHot;
+        }
+
+        // Pagination
+        double totalPages = Math.Ceiling(products.Count() / 8.0); // 3.1 => 4
+        int currentPage = page;
+
+        ViewBag.TotalPages = totalPages;
+        ViewBag.CurrentPage = currentPage;
+
+        products = products.Skip((page -1) * 8).Take(8);
+
+        // Returned Data
+        var categories = _context.Categories.ToList();
+        ViewBag.Categories = categories;
+        //ViewData["Categories"] = categories;
 
         return View(products.ToList());
     }
@@ -36,18 +80,22 @@ public class HomeController : Controller
         ++product.Traffic;
         _context.SaveChanges();
 
-        // Related products
+        // Related Products
         var relatedProducts = _context.Products.Include(e=>e.Category).Where(e => e.CategoryId == product.CategoryId && e.Id != product.Id).Skip(0).Take(4);
 
         // Top Traffic
         var topTraffic = _context.Products.Include(e => e.Category).OrderByDescending(e => e.Traffic).Where(e => e.Id != product.Id).Skip(0).Take(4);
+
+        // Similar Products
+        var similarProducts = _context.Products.Include(e => e.Category).Where(e => e.Name.Contains(product.Name) && e.Id != product.Id).Skip(0).Take(4);
 
         // Return Data
         ProductWithRelatedVM productWithRelatedVM = new()
         {
             Product = product,
             RelatedProducts = relatedProducts.ToList(),
-            TopTraffic = topTraffic.ToList()
+            TopTraffic = topTraffic.ToList(),
+            SimilarProducts = similarProducts.ToList()
         };
 
         return View(productWithRelatedVM);
