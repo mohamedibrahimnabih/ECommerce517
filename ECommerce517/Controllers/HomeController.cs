@@ -33,7 +33,7 @@ public class HomeController : Controller
             return NotFound();
 
         // Update Traffic
-        product.Traffic += 1;
+        ++product.Traffic;
         _context.SaveChanges();
 
         // Related products
