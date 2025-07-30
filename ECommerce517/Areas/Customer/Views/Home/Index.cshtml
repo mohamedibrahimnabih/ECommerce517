@@ -125,7 +125,7 @@
                                 </div>
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/home/details/@item.Id">Details</a></div>
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/Customer/Home/Details/@item.Id">Details</a></div>
                                 </div>
                             </div>
                         </div>
@@ -142,24 +142,24 @@
                         <ul class="pagination">
                             @if (ViewBag.CurrentPage != 1)
                             {
-                                <li class="page-item"><a class="page-link" href="/Home/Index?page=@(ViewBag.CurrentPage-1)&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="/Customer/Home/Index?page=@(ViewBag.CurrentPage-1)&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">Previous</a></li>
                             }
 
                             @for (var i = 1; i <= ViewBag.TotalPages; i++)
                             {
                                 if (i == ViewBag.CurrentPage)
                                 {
-                                    <li class="page-item active"><a class="page-link" href="/Home/Index?page=@i&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">@i</a></li>
+                                    <li class="page-item active"><a class="page-link" href="/Customer/Home/Index?page=@i&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">@i</a></li>
                                 }
                                 else
                                 {
-                                    <li class="page-item"><a class="page-link" href="/Home/Index?page=@i&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">@i</a></li>
+                                    <li class="page-item"><a class="page-link" href="/Customer/Home/Index?page=@i&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">@i</a></li>
                                 }
                             }
 
                             @if (ViewBag.TotalPages != ViewBag.CurrentPage)
                             {
-                                <li class="page-item"><a class="page-link" href="/Home/Index?page=@(ViewBag.CurrentPage+1)&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">Next</a></li>
+                                <li class="page-item"><a class="page-link" href="/Customer/Home/Index?page=@(ViewBag.CurrentPage+1)&ProductName=@ViewBag.ProductName&MinPrice=@ViewBag.MinPrice&MaxPrice=@ViewBag.MaxPrice&CategoryId=@ViewBag.CategoryId&IsHot=@ViewBag.IsHot">Next</a></li>
                             }
                         </ul>
                     </nav>
