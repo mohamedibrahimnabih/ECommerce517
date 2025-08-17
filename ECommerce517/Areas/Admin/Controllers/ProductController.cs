@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ECommerce517.Areas.Admin.Controllers
 {
@@ -120,6 +121,27 @@ namespace ECommerce517.Areas.Admin.Controllers
 
             // Update in DB
             _context.Products.Update(product);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var product = _context.Products.FirstOrDefault(e => e.Id == id);
+
+            if (product is null)
+                return RedirectToAction(SD.NotFoundPage, SD.HomeController);
+
+            // Delete old img from wwwroot
+            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", product.MainImg);
+            if (System.IO.File.Exists(oldFilePath))
+            {
+                System.IO.File.Delete(oldFilePath);
+            }
+
+            // Remove in DB
+            _context.Products.Remove(product);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
