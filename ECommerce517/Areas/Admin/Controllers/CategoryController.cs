@@ -17,14 +17,29 @@ namespace ECommerce517.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new Category());
         }
 
         [HttpPost]
         public IActionResult Create(Category category)
         {
+            if(!ModelState.IsValid)
+            {
+                //var errors = ModelState.Values.SelectMany(e => e.Errors);
+                //TempData["error-notification"] = String.Join(", ", errors.Select(e=>e.ErrorMessage));
+
+                return View(category);
+            }
+
             _context.Categories.Add(category);
             _context.SaveChanges();
+
+            TempData["success-notification"] = "Add Category Successfully";
+            Response.Cookies.Append("success-notification", "Add Category Successfully", new()
+            {
+                Secure = true,
+                Expires = DateTime.Now.AddDays(1)
+            });
 
             return RedirectToAction(nameof(Index));
         }
@@ -43,8 +58,15 @@ namespace ECommerce517.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(Category category)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(category);
+            }
+
             _context.Categories.Update(category);
             _context.SaveChanges();
+
+            TempData["success-notification"] = "Update Category Successfully";
 
             return RedirectToAction(nameof(Index));
         }
@@ -58,6 +80,8 @@ namespace ECommerce517.Areas.Admin.Controllers
 
             _context.Categories.Remove(category);
             _context.SaveChanges();
+
+            TempData["success-notification"] = "Delete Category Successfully";
 
             return RedirectToAction(nameof(Index));
         }
