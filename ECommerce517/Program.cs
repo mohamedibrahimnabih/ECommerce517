@@ -9,6 +9,11 @@ namespace ECommerce517
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+            builder.Services.AddScoped<IRepository<Brand>, Repository<Brand>>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -8,7 +8,12 @@ namespace ECommerce517.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         //private ApplicationDbContext _context = new();
-        private CategoryRepository _categoryRepository = new();
+        private IRepository<Category> _categoryRepository;// = new Repository<Category>();
+
+        public CategoryController(IRepository<Category> categoryRepository)
+        {
+            _categoryRepository = categoryRepository;
+        }
 
         public async Task<IActionResult> Index()
         {
