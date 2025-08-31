@@ -14,6 +14,7 @@ namespace ECommerce517.DataAccess
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<UserOTP> UserOTPs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,16 +22,15 @@ namespace ECommerce517.DataAccess
         }
 
         // Deprecated
-        public ApplicationDbContext()
-        {
-        }
+        //public ApplicationDbContext()
+        //{
+        //}
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ECommerce517;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;");
-        }
-        public DbSet<ECommerce517.ViewModels.RegisterVM> RegisterVM { get; set; } = default!;
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ECommerce517;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;");
+        //}
     }
 }
