@@ -18,6 +18,11 @@ public class HomeController : Controller
         _context = context;
     }
 
+    public IActionResult NotFoundPage()
+    {
+        return View();
+    }
+
     public IActionResult Index(ProductFilterVM productFilterVM, int page = 1)
     {
         const double discount = 50;
@@ -67,7 +72,7 @@ public class HomeController : Controller
         var categories = _context.Categories.ToList();
         ViewBag.Categories = categories;
         //ViewData["Categories"] = categories;
-
+        
         return View(products.ToList());
     }
 

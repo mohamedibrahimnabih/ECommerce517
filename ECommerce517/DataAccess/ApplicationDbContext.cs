@@ -19,6 +19,10 @@ namespace ECommerce517.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasIndex(e => e.Email)
+            //    .IsUnique();
         }
 
         // Deprecated

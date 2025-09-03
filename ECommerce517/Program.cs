@@ -1,3 +1,5 @@
+using ECommerce517.Utility.DBInitializer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,18 +22,32 @@ namespace ECommerce517
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
-                option.Password.RequiredLength = 8;
+                option.Password.RequiredLength = 6;
                 option.Password.RequireNonAlphanumeric = false;
+                option.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Customer/Home/NotFoundPage";
+            });
 
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
             builder.Services.AddScoped<IRepository<Brand>, Repository<Brand>>();
+            
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IRepository<UserOTP>, Repository<UserOTP>>();
+            builder.Services.AddScoped<IDBInitializer, DBInitializer>();
+
+            builder.Services.AddSession(option =>
+            {
+                option.IdleTimeout = TimeSpan.FromMinutes(50);
+            });
 
             var app = builder.Build();
 
@@ -46,7 +62,14 @@ namespace ECommerce517
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
+
+            var scope = app.Services.CreateScope();
+            var service = scope.ServiceProvider.GetService<IDBInitializer>();
+            service.Initialize();
 
             app.MapStaticAssets();
             app.MapControllerRoute(

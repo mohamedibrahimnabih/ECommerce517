@@ -1,10 +1,12 @@
 ﻿using ECommerce517.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace ECommerce517.Areas.Admin.Controllers
 {
     [Area(SD.AdminArea)]
+    [Authorize(Roles = $"{SD.SuperAdminRole},{SD.AdminArea}")]
     public class CategoryController : Controller
     {
         //private ApplicationDbContext _context = new();

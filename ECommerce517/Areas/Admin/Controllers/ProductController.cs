@@ -1,4 +1,5 @@
 ﻿using ECommerce517.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 namespace ECommerce517.Areas.Admin.Controllers
 {
     [Area(SD.AdminArea)]
+    [Authorize(Roles = $"{SD.SuperAdminRole},{SD.AdminArea}")]
     public class ProductController : Controller
     {
         //ApplicationDbContext _context = new();

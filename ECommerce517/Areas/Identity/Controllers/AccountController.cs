@@ -28,6 +28,7 @@ namespace ECommerce517.Areas.Identity.Controllers
         }
 
         [HttpGet]
+        [UserAuthenticatedFilter]
         public IActionResult Register()
         {
             return View();
@@ -45,7 +46,10 @@ namespace ECommerce517.Areas.Identity.Controllers
             {
                 Name = registerVM.Name,
                 Email = registerVM.Email,
-                Address = registerVM.Address,
+                City = registerVM.City,
+                Street = registerVM.Street,
+                State = registerVM.State,
+                ZipCode = registerVM.ZipCode,
                 UserName = registerVM.UserName
             };
 
@@ -62,6 +66,9 @@ namespace ECommerce517.Areas.Identity.Controllers
 
                 return View(registerVM);
             }
+
+            // Add user to customer role
+            await _userManager.AddToRoleAsync(applicationUser, SD.CustomerRole);
 
             // Send confirmation msg
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
@@ -91,6 +98,7 @@ namespace ECommerce517.Areas.Identity.Controllers
         }
 
         [HttpGet]
+        [UserAuthenticatedFilter]
         public IActionResult Login()
         {
             return View();
@@ -128,6 +136,12 @@ namespace ECommerce517.Areas.Identity.Controllers
             if(!user.EmailConfirmed)
             {
                 TempData["error-notification"] = "Confirm Your Email First!";
+                return View(loginVM);
+            }
+
+            if (!user.LockoutEnabled)
+            {
+                TempData["error-notification"] = $"You have a block till {user.LockoutEnd}";
                 return View(loginVM);
             }
 
@@ -288,6 +302,12 @@ namespace ECommerce517.Areas.Identity.Controllers
             await _userManager.ResetPasswordAsync(user, token, newPasswordVM.Password);
 
             TempData["success-notification"] = "Change Password Successfully!";
+            return RedirectToAction("Login", "Account", new { area = "Identity" });
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account", new { area = "Identity" });
         }
     }
